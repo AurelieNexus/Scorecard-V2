@@ -10,7 +10,6 @@ from google_auth_oauthlib.flow import Flow
 
 # imports for aggrid
 from st_aggrid import AgGrid
-from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid import GridUpdateMode, DataReturnMode
@@ -35,7 +34,6 @@ st.set_page_config(
 
 # row limit
 RowCap = 25000
-
 
 ###############################################################################
 
@@ -63,10 +61,13 @@ with tab1:
         st.session_state["my_token_received"] = False
 
     def charly_form_callback():
-        # st.write(st.session_state.my_token_input)
-        st.session_state.my_token_received = True
-        code = st.experimental_get_query_params()["code"][0]
-        st.session_state.my_token_input = code
+        query_params = st.experimental_get_query_params()
+        if "code" in query_params:
+            code = query_params["code"][0]
+            st.session_state.my_token_input = code
+            st.session_state.my_token_received = True
+        else:
+            st.warning("No code found in query parameters. Please check the OAuth process.")
 
     with st.sidebar.form(key="my_form"):
 
@@ -110,7 +111,7 @@ with tab1:
         auth_url, _ = flow.authorization_url(prompt="consent")
 
         submit_button = st.form_submit_button(
-            label="Access GSC API APPPIII", on_click=charly_form_callback
+            label="Access GSC API", on_click=charly_form_callback
         )
 
         st.write("")
@@ -121,16 +122,16 @@ with tab1:
             1. Click on the `Sign-in with Google` button
             2. You will be redirected to the Google Oauth screen
             3. Choose the Google account you want to use & click `Continue`
-            5. You will be redirected back to this app.
-            6. Click on the "Access GSC API" button.
-            7. Voilà! 🙌 
+            4. You will be redirected back to this app.
+            5. Click on the "Access GSC API" button.
+            6. Voilà! 🙌 
             """
             )
             st.write("")
 
         with st.expander("Check your Oauth token"):
             code = st.text_input(
-                "",
+                "Enter the OAuth token here",
                 key="my_token_input",
                 label_visibility="collapsed",
             )
@@ -151,7 +152,6 @@ with tab1:
 
             with st.form(key="my_form2"):
 
-                # text_input_container = st.empty()
                 webpropertiesNEW = st.text_input(
                     "Web property to review (please sign in via Google OAuth first)",
                     value="",
@@ -691,7 +691,6 @@ with tab1:
 
             def get_search_console_data_nested(webproperty):
                 if webproperty is not None:
-                    # query = webproperty.query.range(start="today", days=days).dimension("query")
                     report = (
                         webproperty.query.search_type(search_type)
                         .range("today", days=timescale)
@@ -707,7 +706,6 @@ with tab1:
 
             def get_search_console_data_nested_2(webproperty):
                 if webproperty is not None:
-                    # query = webproperty.query.range(start="today", days=days).dimension("query")
                     report = (
                         webproperty.query.search_type(search_type)
                         .range("today", days=timescale)
@@ -808,7 +806,6 @@ with tab1:
                 df = df.reset_index()
 
                 gb = GridOptionsBuilder.from_dataframe(df)
-                # enables pivoting on all columns, however i'd need to change ag grid to allow export of pivoted/grouped data, however it select/filters groups
                 gb.configure_default_column(
                     enablePivot=True, enableValue=True, enableRowGroup=True
                 )
@@ -817,8 +814,8 @@ with tab1:
                 gridOptions = gb.build()
                 st.info(
                     f"""
-                            💡 Tip! Hold the '⇧ Shift' key when selecting rows to select multiple rows at once!
-                            """
+                                💡 Tip! Hold the '⇧ Shift' key when selecting rows to select multiple rows at once!
+                                """
                 )
 
                 response = AgGrid(
