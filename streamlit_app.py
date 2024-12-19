@@ -1,4 +1,3 @@
-```python
 # basic imports
 import streamlit as st
 import pandas as pd
@@ -623,4 +622,3 @@ with tab2:
     
     """
     )
-```
