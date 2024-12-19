@@ -75,13 +75,13 @@ with tab1:
         mt = Elements()
 
         mt.button(
-            "Sign-in with TES TEST",
+            "Sign-in with Google",
             target="_blank",
             size="large",
             variant="contained",
             start_icon=mt.icons.exit_to_app,
             onclick="none",
-            style={"color": "#4c8bf5", "background": "#4c8bf5"},
+            style={"color": "#FFFFF", "background": "#4c8bf5"},
             href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
             + clientId
             + "&redirect_uri="
