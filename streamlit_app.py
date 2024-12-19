@@ -81,7 +81,7 @@ with tab1:
             variant="contained",
             start_icon=mt.icons.exit_to_app,
             onclick="none",
-            style={"color": "#FFFFF", "background": "#4c8bf5"},
+            style={"color": "#ffffff", "background": "#4c8bf5"},
             href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
             + clientId
             + "&redirect_uri="
